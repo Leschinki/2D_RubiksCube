@@ -10,130 +10,152 @@ using System.Windows.Forms;
 
 namespace _2D_RubiksCube
 {
-    public partial class Form1 : Form
+    public partial class _MainForm : Form
     {
-        public const int GRID_SIZE = 3;
+        public int GRID_SIZE = 0;
         public int CELLSIZE = 0;
+        public const int PANELSIZE = 1000;
+        public const int MARGIN = 10;
+        public const int BUTTONTHICKNESS = 50;
         public int[,] grid;
-        public Bitmap[] BACKGROUND = new Bitmap[9];
+        public Bitmap[] BACKGROUND;
         Bitmap BACKGROUNDFULL;
-        Startscreen start = new Startscreen();   
-        public Form1()
+        Startscreen start = new Startscreen();
+        public Panel _panel;
+        public _MainForm()
         {
-            InitializeComponent();
-            grid = new int[GRID_SIZE, GRID_SIZE];
-            CELLSIZE = _panel.Height / GRID_SIZE;
             start.ShowDialog();
             if (start.DialogResult.Equals(DialogResult.Cancel))
                 System.Environment.Exit(1);
-            BACKGROUNDFULL = new Bitmap(Image.FromFile(start.ImagePath),300,300);
+            GRID_SIZE = start.GRIDSIZE;
+            BACKGROUND = new Bitmap[GRID_SIZE * GRID_SIZE];
+            InitializeComponent();
+            grid = new int[GRID_SIZE, GRID_SIZE];
+            CELLSIZE = PANELSIZE / GRID_SIZE;      
+            BACKGROUNDFULL = new Bitmap(Image.FromFile(start.ImagePath), PANELSIZE, PANELSIZE);
+            this.Size = new Size(PANELSIZE + 150, PANELSIZE + 150);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             setup();
         }
 
         private void setup()
         {
+            CreateFormElements();
             for (int i = 0; i < GRID_SIZE; i++)
             {
                 for (int j = 0; j < GRID_SIZE; j++)
                 {
-                    grid[j, i] = i * GRID_SIZE + j +1;
+                    grid[j, i] = i * GRID_SIZE + j + 1;
                 }
             }
             System.Drawing.Imaging.PixelFormat format = BACKGROUNDFULL.PixelFormat;
             Rectangle cloneRect;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < GRID_SIZE; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < GRID_SIZE; j++)
                 {
-                    cloneRect = new Rectangle(j*CELLSIZE, i*CELLSIZE, 100, 100);
+                    cloneRect = new Rectangle(j * CELLSIZE, i * CELLSIZE, PANELSIZE / GRID_SIZE, PANELSIZE / GRID_SIZE);
 
-                    BACKGROUND[i*GRID_SIZE+j] = BACKGROUNDFULL.Clone(cloneRect, format);
+                    BACKGROUND[i * GRID_SIZE + j] = BACKGROUNDFULL.Clone(cloneRect, format);
                 }
             }
-            
+
         }
 
+        private void CreateFormElements()
+        {
+            Button verticalButton;
+            Button horizontalButton;
+            _panel = new Panel();
+            _panel.Size = new Size(PANELSIZE, PANELSIZE);
+            _panel.Location = new Point(MARGIN + BUTTONTHICKNESS, MARGIN + BUTTONTHICKNESS);
+            _panel.Paint += new PaintEventHandler(OnPaint);
+            this.Controls.Add(_panel);
+            for (int i = 0; i < GRID_SIZE; i++)
+            {
+                verticalButton = new Button();
+                verticalButton.Name = $"_btnRow{i}Left";
+                verticalButton.Size = new Size(BUTTONTHICKNESS, PANELSIZE / GRID_SIZE);
+                verticalButton.Location = new Point(MARGIN, MARGIN + i * (PANELSIZE / GRID_SIZE) + BUTTONTHICKNESS);
+                verticalButton.Text = "<";
+                verticalButton.Click += new EventHandler(MoveLeft);
+                this.Controls.Add(verticalButton);
+            }
+
+            for (int i = 0; i < GRID_SIZE; i++)
+            {
+                verticalButton = new Button();
+                verticalButton.Name = $"_btnRow{i}Right";
+                verticalButton.Size = new Size(BUTTONTHICKNESS, PANELSIZE / GRID_SIZE);
+                verticalButton.Location = new Point(MARGIN + PANELSIZE + BUTTONTHICKNESS, MARGIN + i * (PANELSIZE / GRID_SIZE) + BUTTONTHICKNESS);
+                verticalButton.Text = ">";
+                verticalButton.Click += new EventHandler(MoveRight);
+                this.Controls.Add(verticalButton);
+            }
+
+            for (int j = 0; j < GRID_SIZE; j++)
+            {
+                horizontalButton = new Button();
+                horizontalButton.Name = $"_btnColumn{j}Up";
+                horizontalButton.Size = new Size(PANELSIZE / GRID_SIZE, BUTTONTHICKNESS);
+                horizontalButton.Location = new Point(MARGIN + j * (PANELSIZE / GRID_SIZE) + BUTTONTHICKNESS, MARGIN);
+                horizontalButton.Text = "+";
+                horizontalButton.Click += new EventHandler(MoveUp);
+                this.Controls.Add(horizontalButton);
+            }
+
+            for (int j = 0; j < GRID_SIZE; j++)
+            {
+                horizontalButton = new Button();
+                horizontalButton.Name = $"_btnColumn{j}Down";
+                horizontalButton.Size = new Size(PANELSIZE / GRID_SIZE, BUTTONTHICKNESS);
+                horizontalButton.Location = new Point(MARGIN + j * (PANELSIZE / GRID_SIZE) + BUTTONTHICKNESS, MARGIN + PANELSIZE + BUTTONTHICKNESS);
+                horizontalButton.Text = "-";
+                horizontalButton.Click += new EventHandler(MoveDown);
+                this.Controls.Add(horizontalButton);
+            }
+        }
         private void MoveUp(object sender, EventArgs e)
         {
             var button = (Button)sender;
-            switch (button.Name)
+            int column = Convert.ToInt32(button.Name.Replace("_btnColumn", "").Replace("Up", ""));
+            for (int i = 1; i < GRID_SIZE; i++)
             {
-                case "_btnColumn1Up":
-                    Swap<int>(ref grid[0, 0], ref grid[0, 1]);
-                    Swap<int>(ref grid[0, 1], ref grid[0, 2]);
-                    break;
-                case "_btnColumn2Up":
-                    Swap<int>(ref grid[1, 0], ref grid[1, 1]);
-                    Swap<int>(ref grid[1, 1], ref grid[1, 2]);
-                    break;
-                case "_btnColumn3Up":
-                    Swap<int>(ref grid[2, 0], ref grid[2, 1]);
-                    Swap<int>(ref grid[2, 1], ref grid[2, 2]);
-                    break;
-            }
-            _panel.Invalidate();
-        }
-        private void MoveRight(object sender, EventArgs e)
-        {
-            var button = (Button)sender;
-            switch(button.Name)
-            {
-                case "_btnRow1Right":
-                    Swap<int>(ref grid[2, 0],ref grid[1, 0]);
-                    Swap<int>(ref grid[1, 0], ref grid[0, 0]);
-                    break;
-                case "_btnRow2Right":
-                    Swap<int>(ref grid[2, 1], ref grid[1, 1]);
-                    Swap<int>(ref grid[1, 1], ref grid[0, 1]);
-                    break;
-                case "_btnRow3Right":
-                    Swap<int>(ref grid[2, 2], ref grid[1, 2]);
-                    Swap<int>(ref grid[1, 2], ref grid[0, 2]);
-                    break;
+                Swap<int>(ref grid[column, i], ref grid[column, i - 1]);
             }
             _panel.Invalidate();
         }
         private void MoveDown(object sender, EventArgs e)
         {
             var button = (Button)sender;
-            switch (button.Name)
+            int column = Convert.ToInt32(button.Name.Replace("_btnColumn", "").Replace("Down", ""));
+            for (int i = GRID_SIZE - 1; i > 0; i--)
             {
-                case "_btnColumn1Down":
-                    Swap<int>(ref grid[0, 2], ref grid[0, 1]);
-                    Swap<int>(ref grid[0, 1], ref grid[0, 0]);
-                    break;
-                case "_btnColumn2Down":
-                    Swap<int>(ref grid[1, 2], ref grid[1, 1]);
-                    Swap<int>(ref grid[1, 1], ref grid[1, 0]);
-                    break;
-                case "_btnColumn3Down":
-                    Swap<int>(ref grid[2, 2], ref grid[2, 1]);
-                    Swap<int>(ref grid[2, 1], ref grid[2, 0]);
-                    break;
+                Swap<int>(ref grid[column, i], ref grid[column, i - 1]);
+            }
+            _panel.Invalidate();
+        }
+        private void MoveRight(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+            int row = Convert.ToInt32(button.Name.Replace("_btnRow", "").Replace("Right", ""));
+            for (int i = GRID_SIZE-1; i > 0; i--)
+            {
+                Swap<int>(ref grid[i, row], ref grid[i-1, row]);
             }
             _panel.Invalidate();
         }
         private void MoveLeft(object sender, EventArgs e)
         {
             var button = (Button)sender;
-            switch (button.Name)
+            int row = Convert.ToInt32(button.Name.Replace("_btnRow", "").Replace("Left", ""));
+            for (int i = 1; i < GRID_SIZE; i++)
             {
-                case "_btnRow1Left":
-                    Swap<int>(ref grid[0, 0], ref grid[1, 0]);
-                    Swap<int>(ref grid[1, 0], ref grid[2, 0]);
-                    break;
-                case "_btnRow2Left":
-                    Swap<int>(ref grid[0, 1], ref grid[1, 1]);
-                    Swap<int>(ref grid[1, 1], ref grid[2, 1]);
-                    break;
-                case "_btnRow3Left":
-                    Swap<int>(ref grid[0, 2], ref grid[1, 2]);
-                    Swap<int>(ref grid[1, 2], ref grid[2, 2]);
-                    break;
+                Swap<int>(ref grid[i, row], ref grid[i - 1, row]);
             }
             _panel.Invalidate();
         }
-        private void drawGrid(Graphics gr,Pen pen)
+        private void drawGrid(Graphics gr, Pen pen)
         {
 
             for (int i = 0; i < GRID_SIZE + 1; i++)
@@ -142,23 +164,23 @@ namespace _2D_RubiksCube
             }
             for (int j = 0; j < GRID_SIZE + 1; j++)
             {
-                gr.DrawLine(pen, j * _panel.Width / GRID_SIZE,0, j * _panel.Width / GRID_SIZE,_panel.Height);
+                gr.DrawLine(pen, j * _panel.Width / GRID_SIZE, 0, j * _panel.Width / GRID_SIZE, _panel.Height);
             }
         }
+
         private void OnPaint(object sender, PaintEventArgs e)
         {
             Graphics gr = e.Graphics;
-            drawGrid(gr, new Pen(Brushes.Black, 3));          
+            drawGrid(gr, new Pen(Brushes.Black, 3));
             for (int i = 0; i < GRID_SIZE; i++)
             {
                 for (int j = 0; j < GRID_SIZE; j++)
                 {
-                    gr.DrawImage(BACKGROUND[grid[i,j]-1], i*CELLSIZE,j*CELLSIZE);
-                    gr.DrawString(grid[i, j].ToString(), Font, Brushes.Black, i * CELLSIZE + (CELLSIZE / 2), j * CELLSIZE + (CELLSIZE / 2));
+                    gr.DrawImage(BACKGROUND[grid[i, j] - 1], i * CELLSIZE, j * CELLSIZE);
+                    //gr.DrawString(grid[i, j].ToString(), Font, Brushes.Black, i * CELLSIZE + (CELLSIZE / 2), j * CELLSIZE + (CELLSIZE / 2));
                 }
             }
         }
-
         private void Swap<T>(ref T a, ref T b)
         {
             var x = a;
