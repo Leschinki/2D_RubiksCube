@@ -37,7 +37,7 @@
             this._btnColumn3Up = new System.Windows.Forms.Button();
             this._btnColumn1Up = new System.Windows.Forms.Button();
             this._btnColumn2Up = new System.Windows.Forms.Button();
-            this._btnColumn2DOwn = new System.Windows.Forms.Button();
+            this._btnColumn2Down = new System.Windows.Forms.Button();
             this._btnColumn1Down = new System.Windows.Forms.Button();
             this._btnColumn3Down = new System.Windows.Forms.Button();
             this._panel = new System.Windows.Forms.Panel();
@@ -142,16 +142,16 @@
             this._btnColumn2Up.UseVisualStyleBackColor = true;
             this._btnColumn2Up.Click += new System.EventHandler(this.MoveUp);
             // 
-            // _btnColumn2DOwn
+            // _btnColumn2Down
             // 
-            this._btnColumn2DOwn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._btnColumn2DOwn.Location = new System.Drawing.Point(220, 415);
-            this._btnColumn2DOwn.Name = "_btnColumn2DOwn";
-            this._btnColumn2DOwn.Size = new System.Drawing.Size(75, 75);
-            this._btnColumn2DOwn.TabIndex = 11;
-            this._btnColumn2DOwn.Text = "-";
-            this._btnColumn2DOwn.UseVisualStyleBackColor = true;
-            this._btnColumn2DOwn.Click += new System.EventHandler(this.MoveDown);
+            this._btnColumn2Down.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._btnColumn2Down.Location = new System.Drawing.Point(220, 415);
+            this._btnColumn2Down.Name = "_btnColumn2Down";
+            this._btnColumn2Down.Size = new System.Drawing.Size(75, 75);
+            this._btnColumn2Down.TabIndex = 11;
+            this._btnColumn2Down.Text = "-";
+            this._btnColumn2Down.UseVisualStyleBackColor = true;
+            this._btnColumn2Down.Click += new System.EventHandler(this.MoveDown);
             // 
             // _btnColumn1Down
             // 
@@ -175,10 +175,10 @@
             this._btnColumn3Down.UseVisualStyleBackColor = true;
             this._btnColumn3Down.Click += new System.EventHandler(this.MoveDown);
             // 
-            // panel1
+            // _panel
             // 
             this._panel.Location = new System.Drawing.Point(101, 109);
-            this._panel.Name = "panel1";
+            this._panel.Name = "_panel";
             this._panel.Size = new System.Drawing.Size(300, 300);
             this._panel.TabIndex = 12;
             this._panel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
@@ -189,7 +189,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(524, 515);
             this.Controls.Add(this._panel);
-            this.Controls.Add(this._btnColumn2DOwn);
+            this.Controls.Add(this._btnColumn2Down);
             this.Controls.Add(this._btnColumn1Down);
             this.Controls.Add(this._btnColumn3Down);
             this.Controls.Add(this._btnColumn2Up);
@@ -218,7 +218,7 @@
         private System.Windows.Forms.Button _btnColumn3Up;
         private System.Windows.Forms.Button _btnColumn1Up;
         private System.Windows.Forms.Button _btnColumn2Up;
-        private System.Windows.Forms.Button _btnColumn2DOwn;
+        private System.Windows.Forms.Button _btnColumn2Down;
         private System.Windows.Forms.Button _btnColumn1Down;
         private System.Windows.Forms.Button _btnColumn3Down;
         private System.Windows.Forms.Panel _panel;
