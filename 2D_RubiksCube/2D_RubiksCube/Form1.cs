@@ -17,12 +17,16 @@ namespace _2D_RubiksCube
         public int[,] grid;
         public Bitmap[] BACKGROUND = new Bitmap[9];
         Bitmap BACKGROUNDFULL;
+        Startscreen start = new Startscreen();   
         public Form1()
         {
             InitializeComponent();
             grid = new int[GRID_SIZE, GRID_SIZE];
             CELLSIZE = _panel.Height / GRID_SIZE;
-            BACKGROUNDFULL = new Bitmap(Image.FromFile("ICON.jpg"),300,300);
+            start.ShowDialog();
+            if (start.DialogResult.Equals(DialogResult.Cancel))
+                System.Environment.Exit(1);
+            BACKGROUNDFULL = new Bitmap(Image.FromFile(start.ImagePath),300,300);
             setup();
         }
 
