@@ -15,11 +15,14 @@ namespace _2D_RubiksCube
         public const int GRID_SIZE = 3;
         public int CELLSIZE = 0;
         public int[,] grid;
+        public Bitmap[] BACKGROUND = new Bitmap[9];
+        Bitmap BACKGROUNDFULL;
         public Form1()
         {
             InitializeComponent();
             grid = new int[GRID_SIZE, GRID_SIZE];
             CELLSIZE = _panel.Height / GRID_SIZE;
+            BACKGROUNDFULL = new Bitmap(Image.FromFile("ICON.jpg"),300,300);
             setup();
         }
 
@@ -32,6 +35,18 @@ namespace _2D_RubiksCube
                     grid[j, i] = i * GRID_SIZE + j +1;
                 }
             }
+            System.Drawing.Imaging.PixelFormat format = BACKGROUNDFULL.PixelFormat;
+            Rectangle cloneRect;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    cloneRect = new Rectangle(j*CELLSIZE, i*CELLSIZE, 100, 100);
+
+                    BACKGROUND[i*GRID_SIZE+j] = BACKGROUNDFULL.Clone(cloneRect, format);
+                }
+            }
+            
         }
 
         private void MoveUp(object sender, EventArgs e)
@@ -129,11 +144,12 @@ namespace _2D_RubiksCube
         private void OnPaint(object sender, PaintEventArgs e)
         {
             Graphics gr = e.Graphics;
-            drawGrid(gr, new Pen(Brushes.Black, 3));
+            drawGrid(gr, new Pen(Brushes.Black, 3));          
             for (int i = 0; i < GRID_SIZE; i++)
             {
                 for (int j = 0; j < GRID_SIZE; j++)
                 {
+                    gr.DrawImage(BACKGROUND[grid[i,j]-1], i*CELLSIZE,j*CELLSIZE);
                     gr.DrawString(grid[i, j].ToString(), Font, Brushes.Black, i * CELLSIZE + (CELLSIZE / 2), j * CELLSIZE + (CELLSIZE / 2));
                 }
             }
