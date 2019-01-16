@@ -40,7 +40,7 @@
             this._btnColumn2DOwn = new System.Windows.Forms.Button();
             this._btnColumn1Down = new System.Windows.Forms.Button();
             this._btnColumn3Down = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this._panel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // _btnRow1Right
@@ -177,18 +177,18 @@
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(101, 109);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(300, 300);
-            this.panel1.TabIndex = 12;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
+            this._panel.Location = new System.Drawing.Point(101, 109);
+            this._panel.Name = "panel1";
+            this._panel.Size = new System.Drawing.Size(300, 300);
+            this._panel.TabIndex = 12;
+            this._panel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(524, 515);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this._panel);
             this.Controls.Add(this._btnColumn2DOwn);
             this.Controls.Add(this._btnColumn1Down);
             this.Controls.Add(this._btnColumn3Down);
@@ -221,7 +221,7 @@
         private System.Windows.Forms.Button _btnColumn2DOwn;
         private System.Windows.Forms.Button _btnColumn1Down;
         private System.Windows.Forms.Button _btnColumn3Down;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel _panel;
     }
 }
 
