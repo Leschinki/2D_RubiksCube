@@ -35,6 +35,10 @@ namespace _2D_RubiksCube
         {
             get => gridsize;
         }
+        public int PICSIZE
+        {
+            get => size;
+        }
         public string ImagePath
         {
             get => imagePath;

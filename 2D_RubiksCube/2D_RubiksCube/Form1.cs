@@ -14,7 +14,7 @@ namespace _2D_RubiksCube
     {
         public int GRID_SIZE = 0;
         public int CELLSIZE = 0;
-        public const int PANELSIZE = 1000;
+        public int PANELSIZE = 0;
         public const int MARGIN = 10;
         public const int BUTTONTHICKNESS = 50;
         public int[,] grid;
@@ -31,6 +31,7 @@ namespace _2D_RubiksCube
             BACKGROUND = new Bitmap[GRID_SIZE * GRID_SIZE];
             InitializeComponent();
             grid = new int[GRID_SIZE, GRID_SIZE];
+            PANELSIZE = start.PICSIZE;
             CELLSIZE = PANELSIZE / GRID_SIZE;      
             BACKGROUNDFULL = new Bitmap(Image.FromFile(start.ImagePath), PANELSIZE, PANELSIZE);
             this.Size = new Size(PANELSIZE + 150, PANELSIZE + 150);
